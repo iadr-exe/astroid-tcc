@@ -1,0 +1,59 @@
+<div
+  class="modal fade show bg-backdrop"
+  tabindex="-1"
+  style="display: block"
+  role="dialog"
+  *ngIf="replying"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xl" style="height: 80vh">
+    <form
+      action=""
+      (submit)="onSendClick($event, commentInput)"
+      class="modal-content"
+    >
+      <div class="modal-header">
+        <h5 class="modal-title">Create comment</h5>
+      </div>
+      <div class="modal-body" style="height: 80vh">
+        <div
+          style="overflow-y: scroll; overflow-x: hidden; height: 85%"
+          #replyContainer
+          (scroll)="onScroll()"
+        >
+          <app-message
+            class="w-100"
+            *ngFor="let comment of comments"
+            [commentData]="comment"
+            [isCreator]="isCommentCreator(comment)"
+          >
+          </app-message>
+        </div>
+        <div class="mb-3 w-100">
+          <textarea
+            #commentInput
+            name="createpost"
+            id="createpost"
+            class="form-control"
+            rows="4"
+            style="max-height: 150px"
+            placeholder="Reply"
+          ></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="toggleReplying()">
+          Close
+        </button>
+        <button type="submit" class="btn btn-primary">Post</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<i
+  *ngIf="!replying"
+  (click)="toggleReplying()"
+  class="far fa-comment-dots link-primary"
+  color="purple"
+  role="button"
+></i>

@@ -1,0 +1,24 @@
+<div
+  *ngIf="chatMember"
+  class="d-flex gap-2"
+  role="button"
+  routerLink="/chat/{{ chatData.userId }}"
+>
+  <div>
+    <img
+      src="{{ chatMember.avatar }}"
+      alt="Chat icon"
+      width="42"
+      height="42"
+      class="rounded-circle border"
+      style="object-fit: cover"
+    />
+  </div>
+  <span class="fw-bold my-auto">
+    {{
+      chatMember.companyAccount === "0"
+        ? chatMember.firstName + " " + chatMember.lastName
+        : chatMember.companyName
+    }}
+  </span>
+</div>

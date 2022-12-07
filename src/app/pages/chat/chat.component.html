@@ -1,0 +1,103 @@
+<div
+  class="d-flex vh-93 justify-content-center align-content-center align-items-center"
+>
+  <div class="row border w-100 vh-90">
+    <div class="col-4 p-0">
+      <div *ngFor="let chat of chats" class="border-bottom p-2">
+        <app-chat-card [chatData]="chat"></app-chat-card>
+      </div>
+    </div>
+    <div class="col-8 border-start p-0 m-0">
+      <div class="vh-80">
+        <div *ngIf="loading" class="text-center">Carregando...</div>
+        <div class="h-100" *ngIf="!loading">
+          <div
+            class="border-bottom p-2 text-center d-flex justify-content-center align-content-center align-items-center"
+          >
+            <div class="me-3">
+              <img
+                src="{{ chat?.icon }}"
+                alt="Chat icon"
+                width="42"
+                height="42"
+                class="rounded-circle border"
+                style="object-fit: cover"
+              />
+            </div>
+            <div>
+              <h3>
+                <b>{{ chat?.name }}</b>
+              </h3>
+            </div>
+          </div>
+          <div
+            class="h-100 border border-1 border-light d-flex justify-content-between flex-column ps-4"
+          >
+            <div
+              style="overflow-y: scroll; height: 100%"
+              #messageContainer
+              (scroll)="onScroll()"
+            >
+              <app-message
+                class="my-1 w-100"
+                *ngFor="let message of messages"
+                [commentData]="message"
+                [isCreator]="isMessageAuthor(message)"
+              >
+              </app-message>
+            </div>
+            <form
+              class="border border-light d-flex justify-content-center align-content-center align-items-center"
+              method=""
+              (submit)="sendMessage($event, message)"
+            >
+              <textarea
+                #message
+                placeholder="Type your message here."
+                class="form-control"
+                [required]="true"
+                id="message"
+                name="message"
+                style="max-height: 150px; min-height: 50px"
+              ></textarea>
+              <div id="photo-preview-container">
+                <img
+                  src=""
+                  alt="Photo Preview"
+                  id="photoPreview"
+                  style="
+                    display: none;
+                    width: 50px;
+                    height: 50px;
+                    object-fit: cover;
+                    margin-left: 20px;
+                    border-radius: 12px;
+                    border: 1px solid white;
+                  "
+                />
+              </div>
+              <div class="px-3">
+                <input
+                  #photoSelector
+                  (input)="photoUpload(photoSelector)"
+                  [required]="false"
+                  type="file"
+                  id="photoSelector"
+                  name="photoSelector"
+                  accept="image/*"
+                  hidden
+                />
+                <label for="photoSelector">
+                  <i class="fas fa-image text-primary"></i>
+                </label>
+              </div>
+              <div class="px-3">
+                <button type="submit" class="btn btn-primary">Enviar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

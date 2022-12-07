@@ -1,0 +1,13 @@
+#post-preview {
+  text-align: right;
+  margin-right: 1em;
+}
+
+#post-preview-image {
+  object-fit: cover;
+  object-position: center;
+  width: 150px;
+  height: 100px;
+  border-radius: 1em;
+  border: 1px dashed gray;
+}

@@ -1,0 +1,31 @@
+<div
+  class="{{
+    isCreator ? 'bg-secondary ms-auto me-3' : 'bg-light me-auto ms-3'
+  }} text-dark px-3 mb-2 pt-1 pb-2 comment shadow-sm
+  "
+  style="border-top-left-radius: {{ isCreator ? '12pt' : '0pt' }}; border-top-right-radius: {{ isCreator ? '0pt' : '12pt' }}; border-bottom-left-radius: 12pt; border-bottom-right-radius: 12pt"
+  *ngIf="comment"
+>
+  <div style="font-weight: 700">
+    <a
+      routerLink="/profile/{{ comment.authorId }}"
+      class="text-primary text-decoration-none me-1"
+    >
+      {{ comment.author.name }}
+    </a>
+    <small class="fw-normal text-light">
+      {{ comment.date }}
+    </small>
+  </div>
+  <div *ngIf="comment.content.length > 0" class="mb-1">
+    {{ comment.content }}
+  </div>
+  <img
+    src="{{ attachment.url }}"
+    alt="{{ attachment.name }}"
+    width="180"
+    height="180"
+    class="rounded-3"
+    *ngFor="let attachment of comment.attachments"
+  />
+</div>

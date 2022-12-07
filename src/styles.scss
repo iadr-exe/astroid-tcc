@@ -1,0 +1,68 @@
+@import url(https://cdn.jsdelivr.net/gh/tallesairan/FA5PRO@fa6/css/all.min.css);
+
+$primary: #6e44ff;
+$secondary: #b892ff;
+$dark: #2c2a4a;
+$light: #fbfaff;
+$success: #80ffdb;
+$body-bg: $light;
+$body-color: $dark;
+$input-btn-border-width: 0px;
+$input-btn-focus-width: 0px;
+$modal-content-border-width: 0px;
+$modal-header-border-width: 0px;
+
+@for $number from 1 through 100 {
+  .vh-#{$number} {
+    height: #{$number}vh;
+  }
+  .vw-#{$number} {
+    width: #{$number}vh;
+  }
+}
+
+.bg-backdrop {
+  background-color: rgba($dark, 0.7);
+}
+
+input,
+textarea,
+select {
+  border-bottom: 1px solid $primary !important;
+
+  &:focus-visible {
+    border-bottom-color: #4206a1 !important;
+  }
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+@import "bootstrap";
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+
+$positions: (fixed, absolute, relative, sticky, static);
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+  @include media-breakpoint-up($breakpoint) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+    @each $position in $positions {
+      .position#{$infix}-#{$position} {
+        position: $position !important;
+      }
+    }
+  }
+}

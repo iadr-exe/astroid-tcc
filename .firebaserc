@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "astroid-edfdb": {
+      "hosting": {
+        "astroid": [
+          "astroid-edfdb"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "astroid-edfdb"
+  }
+}

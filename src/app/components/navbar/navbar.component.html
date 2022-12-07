@@ -1,0 +1,300 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand p-0 m-0" routerLink="/">
+      <img src="assets/logo-branco.png" alt="" />
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navContent"
+      aria-controls="navContent"
+      aria-expanded="false"
+      aria-label="Change navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="collapse navbar-collapse position-relative"
+      id="navContent"
+      *ngIf="loggedIn && userData && userData.accountCreated"
+    >
+      <ul
+        class="navbar-nav position-lg-absolute w-100 top-0 left-0 d-lg-flex justify-content-lg-center align-items-lg-center align-content-lg-center"
+        style="z-index: 0"
+      >
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/">
+            <i class="fas fa-home"></i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/feed">
+            <i class="fas fa-newspaper"></i> Feed
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/feed/projects">
+            <i class="fas fa-rectangle-vertical-history"></i> Projects
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/users">
+            <i class="fas fa-users"></i> Users
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/companies">
+            <i class="fas fa-building"></i> Companies
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/chats">
+            <i class="fas fa-messages"></i> Messages
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto" style="z-index: 1">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/profile/{{ userData.userId }}">
+            <img
+              [src]="userData.avatar"
+              alt="User avatar"
+              width="28"
+              height="28"
+              class="rounded-circle m-0 p-0"
+              style="object-fit: cover"
+            />
+            {{
+              userData.companyAccount === "0"
+                ? userData.firstName + " " + userData.lastName
+                : userData.companyName
+            }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" (click)="_authService.signOut()">
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div
+  class="bg-dark position-fixed top-0 start-0 w-100 h-100 text-dark"
+  *ngIf="
+    loggedIn && userData && !userData.accountCreated && userData.emailVerified
+  "
+>
+  <div class="container h-100">
+    <div
+      class="row h-100 justify-content-center align-content-center align-items-center text-center"
+    >
+      <div class="col-xl-6 col-md-8 col-12 bg-light shadow rounded-3 p-4">
+        <h3 class="mb-5">Tell me more about you...</h3>
+        <form
+          action=""
+          (submit)="submitProfile($event)"
+          class="row justify-content-center"
+        >
+          <div class="mb-3 col-12">
+            <input
+              type="file"
+              accept="image/*"
+              #avatar
+              hidden
+              id="avatar"
+              name="avatar"
+              [required]="false"
+              (input)="changeUserData(avatar, 'avatar', true)"
+            />
+            <label for="avatar" class="w-100">
+              <img
+                [src]="
+                  userData.avatar ? userData.avatar : 'assets/defaultAvatar.png'
+                "
+                #avatarPreview
+                alt="User Icon"
+                id="avatarPreview"
+                name="avatarPreview"
+                width="180px"
+                height="180px"
+                class="rounded-circle border border-1 border-secondary shadow"
+                style="object-fit: cover"
+              />
+            </label>
+          </div>
+          <div class="mb-3 col-12 form-check text-start ms-4">
+            <input
+              #accountType
+              class="form-check-input"
+              type="checkbox"
+              id="accountType"
+              name="accountType"
+              [checked]="userData.companyAccount === '0' ? false : true"
+              (change)="toggleAccountType($event)"
+            />
+            <label for="accountType" class="form-check-label">
+              Company account
+            </label>
+          </div>
+          <ng-container *ngIf="userData.companyAccount === '0'">
+            <div class="mb-3 col-md-6 col-12">
+              <input
+                #firstName
+                type="text"
+                class="form-control"
+                placeholder="What is your first name?"
+                id="firstName"
+                name="firstName"
+                [required]="true"
+                (input)="changeUserData(firstName.value, 'firstName', false)"
+              />
+            </div>
+            <div class="mb-3 col-md-6 col-12">
+              <input
+                #lastName
+                type="text"
+                class="form-control"
+                placeholder="What is your last name?"
+                id="lastName"
+                name="lastName"
+                [required]="true"
+                (input)="changeUserData(lastName.value, 'lastName', false)"
+              />
+            </div>
+          </ng-container>
+          <ng-container *ngIf="userData.companyAccount === '1'">
+            <div class="mb-3 col-md-6 col-12">
+              <input
+                #companyName
+                type="text"
+                class="form-control"
+                placeholder="What is your company name?"
+                id="companyName"
+                name="companyName"
+                [required]="true"
+                (input)="
+                  changeUserData(companyName.value, 'companyName', false)
+                "
+              />
+            </div>
+          </ng-container>
+          <div class="col-12">
+            <h5>
+              Where
+              {{
+                userData.companyAccount === "1" ? "is your company" : "are you"
+              }}
+              from?
+            </h5>
+          </div>
+          <div class="mb-3 col-md-4 col-sm-12">
+            <select
+              #country
+              class="form-select"
+              id="country"
+              name="country"
+              [required]="false"
+              (input)="changeCountry(country.value)"
+              *ngIf="cs"
+            >
+              <option *ngFor="let country of cs" value="{{ country.name }}">
+                {{ country.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3 col-md-4 col-sm-12">
+            <select
+              #state
+              class="form-select"
+              id="state"
+              name="state"
+              [required]="false"
+              (input)="changeState(state.value)"
+              *ngIf="cs && actualStates"
+            >
+              <option
+                *ngFor="let state of actualStates"
+                value="{{ state.name }}"
+              >
+                {{ state.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3 col-md-4 col-sm-12">
+            <select
+              #city
+              class="form-select"
+              id="city"
+              name="city"
+              [required]="false"
+              *ngIf="cs && actualCities"
+              (input)="changeUserData(city.value, 'city', false)"
+            >
+              <option *ngFor="let city of actualCities" value="{{ city }}">
+                {{ city }}
+              </option>
+            </select>
+          </div>
+          <ng-container *ngIf="userData.companyAccount === '0'">
+            <div class="mb-3 col-12">
+              <input
+                #gender
+                type="text"
+                class="form-control"
+                placeholder="Do you feel comfortable telling us your gender?"
+                id="gender"
+                name="gender"
+                [required]="true"
+                (input)="changeUserData(gender.value, 'gender', false)"
+              />
+            </div>
+          </ng-container>
+          <div class="mb-3 col-12 text-end">
+            <textarea
+              #biography
+              class="form-control"
+              placeholder="{{
+                userData.companyAccount === '1'
+                  ? 'My company is big!'
+                  : 'My favorite color is...'
+              }}"
+              id="biography"
+              name="biography"
+              maxlength="160"
+              [required]="false"
+              (input)="changeUserData(biography.value, 'biography', false)"
+              style="max-height: 160px"
+            ></textarea>
+            <small>
+              <span
+                class="text-{{
+                  biography.value.length >= 40 && biography.value.length < 90
+                    ? 'warning'
+                    : biography.value.length >= 90
+                    ? 'danger'
+                    : 'success'
+                }}"
+              >
+                {{ biography.value.length }}
+              </span>
+              <span
+                class="text-{{
+                  biography.value.length === 160 ? 'danger' : 'muted'
+                }}"
+              >
+                /160
+              </span>
+            </small>
+          </div>
+          <div class="mb-3 col-12">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

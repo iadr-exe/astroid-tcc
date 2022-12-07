@@ -1,0 +1,40 @@
+<div
+  class="position-absolute top-0 start-0 vw-100 vh-100 d-flex justify-content-center align-content-center align-items-center text-center"
+  style="
+    background-image: url('https://wallpapercave.com/wp/wp7034448.png');
+    background-size: cover;
+    z-index: -1;
+  "
+>
+  <div class="p-5 position-relative">
+    <div
+      class="position-absolute w-100 h-100 top-0 start-0"
+      style="
+        z-index: -1;
+        background: rgba(255, 255, 255, 0.212);
+        border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+      "
+    ></div>
+    <div class="mb-5">
+      <h1 class="text-light fw-bold">Welcome!</h1>
+      <small class="text-light">
+        <i>Astroid, the best social media for you...</i>
+      </small>
+    </div>
+    <div>
+      <a class="btn btn-primary mb-3" routerLink="/feed" *ngIf="loggedIn">
+        View feed
+      </a>
+      <a class="btn btn-primary mb-3" routerLink="/register" *ngIf="!loggedIn">
+        Create Account
+      </a>
+      <br />
+      <a class="btn btn-primary mb-3" routerLink="/login" *ngIf="!loggedIn">
+        Login
+      </a>
+    </div>
+  </div>
+</div>

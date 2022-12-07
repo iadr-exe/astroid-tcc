@@ -1,0 +1,8 @@
+<div
+  class="w-100 vh-100 d-flex justify-content-center align-content-center align-items-center"
+  *ngIf="chats.length > 0"
+>
+  <div class="bg-light shadow p-3 rounded-3 w-100">
+    <app-chat-card *ngFor="let chat of chats" [chatData]="chat"></app-chat-card>
+  </div>
+</div>

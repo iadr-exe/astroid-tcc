@@ -1,0 +1,73 @@
+<div class="border-bottom border-muted py-4" *ngIf="post">
+  <div class="d-flex">
+    <div>
+      <img
+        src="{{ post.creator.avatar }}"
+        width="50"
+        height="50"
+        class="rounded-circle me-2"
+        style="object-fit: cover"
+      />
+    </div>
+    <div class="post-comment w-100">
+      <div>
+        <a
+          routerLink="/profile/{{ post.creatorId }}"
+          class="text-primary text-decoration-none me-1 fw-bold"
+        >
+          {{ post.creator.name }}
+        </a>
+        <span>
+          <small class="text-muted">{{ post.date }}</small>
+        </span>
+      </div>
+      <div>
+        {{ post.type === 1 ? post.post.comment : post.project.description }}
+      </div>
+      <div *ngIf="post.type === 2" class="mt-3">
+        <small class="text-muted">Contact info</small>
+        <div>
+          <b>Phone number: </b>
+          <a href="tel:{{ post.project.tel }}">{{ post.project.tel }}</a>
+        </div>
+        <div>
+          <b>Email: </b>
+          <a href="mailto:{{ post.project.email }}">
+            {{ post.project.email }}
+          </a>
+        </div>
+        <br />
+        <small class="text-muted">Final date</small>
+        <div>
+          {{ getFormatedDate(post.project.endDate) }}
+        </div>
+      </div>
+      <div
+        class="post-images"
+        *ngIf="post.post?.imageUrl || post.project?.imageUrl"
+      >
+        <img
+          class="w-100 mt-1 rounded-3 bg-light"
+          src="{{ post.post?.imageUrl || post.project?.imageUrl }}"
+          style="height: min-content"
+        />
+      </div>
+      <div
+        class="d-flex justify-content-between"
+        style="margin: 10px 40px 0 40px"
+      >
+        <app-post-reply [postId]="postData.postId"></app-post-reply>
+        <i class="fal fa-heart link-danger" role="button"></i>
+        <a
+          class="{{ post.post?.imageUrl ? '' : 'disabled' }} link-dark"
+          href="{{ post.post?.imageUrl }}"
+          target="_blank"
+          download
+        >
+          <i class="fal fa-download"></i>
+        </a>
+        <i class="fal fa-share"></i>
+      </div>
+    </div>
+  </div>
+</div>

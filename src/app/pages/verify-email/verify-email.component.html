@@ -1,0 +1,23 @@
+<div class="vh-100 d-flex align-content-center align-items-center">
+  <div class="col-xl-4 col-md-8 col-sm-12 mx-auto text-center">
+    <h3>Thanks for registering!</h3>
+
+    <div class="mb-3" *ngIf="userData">
+      We have sent a confirmation email to <b>{{ userData.email }}</b>
+      <br />
+      Now check your email to confirm your account creation.
+    </div>
+    <div class="mb-3">
+      <button
+        type="button"
+        class="btn btnPrimary"
+        (click)="_authService.sendVerificationMail()"
+      >
+        <i class="fas fa-redo-alt"></i>
+        Resend Verification Email
+      </button>
+    </div>
+    Back to
+    <a class="link-primary" routerLink="/login">login!</a>
+  </div>
+</div>

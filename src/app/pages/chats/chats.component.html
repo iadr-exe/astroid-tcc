@@ -1,0 +1,16 @@
+<div
+  class="d-flex vh-93 justify-content-center align-content-center align-items-center"
+>
+  <div class="row border w-100 vh-90">
+    <div class="col-4 p-0">
+      <div *ngFor="let chat of chats" class="border-bottom p-2">
+        <app-chat-card [chatData]="chat"></app-chat-card>
+      </div>
+    </div>
+    <div
+      class="col-8 border-start d-flex justify-content-center align-content-center align-items-center"
+    >
+      <h3>Selecione um chat para iniciar uma conversa!</h3>
+    </div>
+  </div>
+</div>

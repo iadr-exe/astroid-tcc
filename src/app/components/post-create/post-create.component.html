@@ -1,0 +1,343 @@
+<div *ngIf="userData && userData.accountCreated">
+  <h4 class="text-primary">
+    Create
+    {{ !postType ? "post" : "project" }}
+  </h4>
+  <!--
+    Post
+  -->
+  <div *ngIf="!postType">
+    <form
+      action=""
+      (submit)="
+        onPostClick($event, publicationCommentary.value);
+        publicationCommentary.value = ''
+      "
+    >
+      <textarea
+        #publicationCommentary
+        name="publicationCommentary"
+        id="publicationCommentary"
+        class="form-control"
+        [disabled]="posting"
+        rows="4"
+        style="max-height: 150px"
+        placeholder="Welcome {{ userData.firstName }}, what are you doing?"
+        [required]="true"
+      ></textarea>
+      <div class="mt-2">
+        <div
+          class="d-flex align-items-center align-content-center justify-content-end"
+        >
+          <input
+            #postPhoto
+            (change)="onPhotoSelected(postPhoto)"
+            type="file"
+            id="postPhoto"
+            name="postPhoto"
+            accept="image/*"
+            hidden
+          />
+          <div *ngIf="selectedImageFile" id="post-preview">
+            <img id="post-preview-image" />
+          </div>
+          <label for="postPhoto">
+            <i class="fas fa-image fs-4 text-primary"></i>
+          </label>
+          <button type="submit" class="btn btn-primary ms-2">Post</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!--
+    Project
+  -->
+  <div *ngIf="postType">
+    <form
+      action=""
+      (submit)="
+        onProjectClick(
+          $event,
+          description.value,
+          date.value,
+          tel.value,
+          email.value
+        );
+        description.value = '';
+        date.value = '';
+        tel.value = '';
+        email.value = ''
+      "
+      class="row"
+    >
+      <div class="col-12 mb-3">
+        <textarea
+          #description
+          name="description"
+          id="description"
+          class="form-control"
+          [disabled]="posting"
+          rows="4"
+          style="max-height: 150px"
+          placeholder="Project description"
+          [required]="true"
+        ></textarea>
+      </div>
+      <div class="col-12 mb-3">
+        <label for="date">What is the project end date?</label>
+        <input
+          #date
+          type="datetime-local"
+          class="form-control"
+          [disabled]="posting"
+          placeholder="What is the project end date?"
+          id="date"
+          name="date"
+          [required]="true"
+          [min]="today | date: 'yyyy-MM-dd'"
+          [value]="today | date: 'yyyy-MM-dd'"
+        />
+      </div>
+      <div class="col-6 mb-3">
+        <input
+          #tel
+          type="text"
+          class="form-control"
+          [disabled]="posting"
+          placeholder="Main contact phone (12) 91234-5678"
+          id="tel"
+          name="tel"
+          [required]="true"
+          mask="(00) 0000-0000||(00) 0 0000-0000"
+        />
+      </div>
+      <div class="col-6 mb-3">
+        <input
+          #email
+          type="email"
+          class="form-control"
+          [disabled]="posting"
+          placeholder="Main contact Email"
+          id="email"
+          name="email"
+          [required]="true"
+        />
+      </div>
+      <div class="mt-2">
+        <div
+          class="d-flex align-items-center align-content-center justify-content-end"
+        >
+          <input
+            #projectPhoto
+            (change)="onPhotoSelected(projectPhoto)"
+            type="file"
+            id="projectPhoto"
+            name="projectPhoto"
+            accept="image/*"
+            hidden
+          />
+          <div *ngIf="selectedImageFile" id="post-preview">
+            <img id="post-preview-image" />
+          </div>
+          <label for="projectPhoto">
+            <i class="fas fa-image fs-4 text-primary"></i>
+          </label>
+          <button type="submit" class="btn btn-primary ms-2">Post</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="mb-3 form-check" *ngIf="showPostTypeToggle">
+    <input
+      #isProject
+      class="form-check-input"
+      type="checkbox"
+      name="isProject"
+      id="isProject"
+      [checked]="postType"
+      (change)="togglePostType($event)"
+    />
+    <label class="form-check-label" for="isProject">Create as project</label>
+  </div>
+
+  <!--
+    Create post/project with modal
+  -->
+  <div class="position-fixed bottom-0 end-0 me-4 mb-4">
+    <button
+      type="button"
+      class="btn btn-primary btn-lg rounded-circle shadow"
+      (click)="toggleCreating()"
+    >
+      <i class="fas fa-plus"></i>
+    </button>
+  </div>
+
+  <div
+    class="modal fade show bg-backdrop"
+    tabindex="-1"
+    style="display: block"
+    role="dialog"
+    *ngIf="creatingPost"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Create {{ postType ? "project" : "post" }}
+          </h5>
+          <button
+            type="button"
+            class="btn btn-secondary rounded-circle"
+            (click)="toggleCreating()"
+          >
+            <i class="fas fa-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="!postType">
+            <form
+              action=""
+              (submit)="
+                onPostClick($event, publicationCommentary.value);
+                publicationCommentary.value = ''
+              "
+            >
+              <textarea
+                #publicationCommentary
+                name="publicationCommentary"
+                id="publicationCommentary"
+                class="form-control"
+                [disabled]="posting"
+                rows="4"
+                style="max-height: 150px"
+                placeholder="Welcome {{
+                  userData.firstName
+                }}, what are you doing?"
+                [required]="true"
+              ></textarea>
+              <div class="mt-2">
+                <div
+                  class="d-flex align-items-center align-content-center justify-content-end"
+                >
+                  <input
+                    #postPhoto
+                    (change)="onPhotoSelected(postPhoto)"
+                    type="file"
+                    id="postPhoto"
+                    name="postPhoto"
+                    accept="image/*"
+                    hidden
+                  />
+                  <div *ngIf="selectedImageFile" id="post-preview">
+                    <img id="post-preview-image" />
+                  </div>
+                  <label for="postPhoto">
+                    <i class="fas fa-image fs-4 text-primary"></i>
+                  </label>
+                  <button type="submit" class="btn btn-primary ms-2">
+                    Post
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div *ngIf="postType">
+            <form
+              action=""
+              (submit)="
+                onProjectClick(
+                  $event,
+                  description.value,
+                  date.value,
+                  tel.value,
+                  email.value
+                )
+              "
+              class="row"
+            >
+              <div class="col-12 mb-3">
+                <textarea
+                  #description
+                  name="description"
+                  id="description"
+                  class="form-control"
+                  [disabled]="posting"
+                  rows="4"
+                  style="max-height: 150px"
+                  placeholder="Project description"
+                  [required]="true"
+                ></textarea>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="date">What is the project end date?</label>
+                <input
+                  #date
+                  type="datetime-local"
+                  class="form-control"
+                  [disabled]="posting"
+                  placeholder="What is the project end date?"
+                  id="date"
+                  name="date"
+                  [required]="true"
+                  [min]="today | date: 'yyyy-MM-dd'"
+                  [value]="today | date: 'yyyy-MM-dd'"
+                />
+              </div>
+              <div class="col-6 mb-3">
+                <input
+                  #tel
+                  type="text"
+                  class="form-control"
+                  [disabled]="posting"
+                  placeholder="Main contact phone (12) 91234-5678"
+                  id="tel"
+                  name="tel"
+                  [required]="true"
+                  mask="(00) 0000-0000||(00) 0 0000-0000"
+                />
+              </div>
+              <div class="col-6 mb-3">
+                <input
+                  #email
+                  type="email"
+                  class="form-control"
+                  [disabled]="posting"
+                  placeholder="Main contact Email"
+                  id="email"
+                  name="email"
+                  [required]="true"
+                />
+              </div>
+              <div class="mt-2">
+                <div
+                  class="d-flex align-items-center align-content-center justify-content-end"
+                >
+                  <button type="submit" class="btn btn-primary ms-2">
+                    Post
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="mb-3 form-check" *ngIf="showPostTypeToggle">
+            <input
+              #isProject
+              class="form-check-input"
+              type="checkbox"
+              name="isProject"
+              id="isProject"
+              [checked]="postType"
+              (change)="togglePostType($event)"
+            />
+            <label class="form-check-label" for="isProject">
+              Create as project
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

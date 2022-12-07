@@ -1,0 +1,42 @@
+<div class="row">
+  <div *ngFor="let user of users" class="col-xl-3 col-md-4 col-12 p-2">
+    <div
+      class="bg-light shadow p-2 h-100 w-100 d-flex align-items-center align-content-center"
+      *ngIf="user.userId !== userData.userId"
+    >
+      <div class="text-center">
+        <img
+          src="{{ user.avatar ? user.avatar : 'assets/defaultAvatar.png' }}"
+          alt="User avatar"
+          width="42"
+          height="42"
+          class="rounded-circle border"
+          style="object-fit: cover"
+        />
+        <small class="text-muted">
+          <i>{{ user.companyAccount === "0" ? "" : "Company" }}</i>
+        </small>
+      </div>
+      <div class="ms-2 w-100">
+        <a class="fw-bold h5" routerLink="/profile/{{ user.userId }}">
+          {{
+            user.companyAccount === "0"
+              ? user.firstName + " " + user.lastName
+              : user.companyName
+          }}
+        </a>
+        <div>
+          <small class="text-muted">{{ user.biography }}</small>
+        </div>
+      </div>
+      <div>
+        <a
+          routerLink="/chat/{{ user.userId }}"
+          class="btn btn-primary rounded-circle"
+        >
+          <i class="fal fa-location-arrow"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

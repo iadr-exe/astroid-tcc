@@ -1,0 +1,226 @@
+<div *ngIf="userData">
+  <div
+    class="bg-primary position-absolute top-0 start-0 vh-25 vw-100"
+    style="z-index: -1"
+  ></div>
+  <div class="vh-18"></div>
+  <div class="row m-0 container">
+    <div class="col-md-2 col-4 text-center">
+      <label for="avatar">
+        <img
+          src="{{
+            userData.avatar ? userData.avatar : 'assets/defaultAvatar.png'
+          }}"
+          id="avatarPreview"
+          alt="Profile Picture"
+          class="bg-light rounded-circle shadow"
+          width="120px"
+          height="120px"
+          style="object-fit: cover; transform: translate(0, -50%)"
+        />
+      </label>
+      <input
+        type="file"
+        accept="image/*"
+        #avatar
+        hidden
+        id="avatar"
+        name="avatar"
+        [required]="false"
+        (input)="changeUserData(avatar, 'avatar', true)"
+      />
+    </div>
+    <div class="col-md-4 col-7">
+      <div class="mt-2">
+        <h2>
+          {{
+            userData.companyAccount === "0"
+              ? userData.firstName + " " + userData.lastName
+              : userData.companyName
+          }}
+        </h2>
+        <p class="text-muted">{{ userData.biography }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center text-center">
+    <div class="col-md-5 col-12">
+      <form
+        action=""
+        (submit)="submitProfile($event)"
+        class="row justify-content-center"
+      >
+        <div class="mb-3 col-12 form-check text-start ms-4">
+          <input
+            #accountType
+            class="form-check-input"
+            type="checkbox"
+            id="accountType"
+            name="accountType"
+            [checked]="userData.companyAccount === '0' ? false : true"
+            (change)="toggleAccountType($event)"
+          />
+          <label for="accountType" class="form-check-label">
+            Company account
+          </label>
+        </div>
+        <ng-container *ngIf="userData.companyAccount === '0'">
+          <div class="mb-3 col-md-6 col-12">
+            <input
+              #firstName
+              type="text"
+              class="form-control"
+              placeholder="What is your first name?"
+              id="firstName"
+              name="firstName"
+              [required]="true"
+              [value]="userData.firstName"
+              (input)="changeUserData(firstName.value, 'firstName', false)"
+            />
+          </div>
+          <div class="mb-3 col-md-6 col-12">
+            <input
+              #lastName
+              type="text"
+              class="form-control"
+              placeholder="What is your last name?"
+              id="lastName"
+              name="lastName"
+              [required]="true"
+              [value]="userData.lastName"
+              (input)="changeUserData(lastName.value, 'lastName', false)"
+            />
+          </div>
+        </ng-container>
+        <ng-container *ngIf="userData.companyAccount === '1'">
+          <div class="mb-3 col-md-6 col-12">
+            <input
+              #companyName
+              type="text"
+              class="form-control"
+              placeholder="What is your company name?"
+              id="companyName"
+              name="companyName"
+              [required]="true"
+              [value]="userData.companyName"
+              (input)="changeUserData(companyName.value, 'companyName', false)"
+            />
+          </div>
+        </ng-container>
+        <div class="col-12">
+          <h5>
+            Where
+            {{
+              userData.companyAccount === "1" ? "is your company" : "are you"
+            }}
+            from?
+          </h5>
+        </div>
+        <div class="mb-3 col-md-4 col-sm-12">
+          <select
+            #country
+            class="form-select"
+            id="country"
+            name="country"
+            [required]="false"
+            [value]="userData.country"
+            (input)="changeCountry(country.value)"
+            *ngIf="cs"
+          >
+            <option *ngFor="let country of cs" value="{{ country.name }}">
+              {{ country.name }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3 col-md-4 col-sm-12">
+          <select
+            #state
+            class="form-select"
+            id="state"
+            name="state"
+            [required]="false"
+            [value]="userData.state"
+            (input)="changeState(state.value)"
+            *ngIf="cs && actualStates"
+          >
+            <option *ngFor="let state of actualStates" value="{{ state.name }}">
+              {{ state.name }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3 col-md-4 col-sm-12">
+          <select
+            #city
+            class="form-select"
+            id="city"
+            name="city"
+            [required]="false"
+            *ngIf="cs && actualCities"
+            [value]="userData.province"
+            (input)="changeUserData(city.value, 'city', false)"
+          >
+            <option *ngFor="let city of actualCities" value="{{ city }}">
+              {{ city }}
+            </option>
+          </select>
+        </div>
+        <ng-container *ngIf="userData.companyAccount === '0'">
+          <div class="mb-3 col-12">
+            <input
+              #gender
+              type="text"
+              class="form-control"
+              placeholder="Do you feel comfortable telling us your gender?"
+              id="gender"
+              name="gender"
+              [required]="true"
+              [value]="userData.gender"
+              (input)="changeUserData(gender.value, 'gender', false)"
+            />
+          </div>
+        </ng-container>
+        <div class="mb-3 col-12 text-end">
+          <textarea
+            #biography
+            class="form-control"
+            placeholder="{{
+              userData.companyAccount === '1'
+                ? 'My company is big!'
+                : 'My favorite color is...'
+            }}"
+            id="biography"
+            name="biography"
+            maxlength="160"
+            [required]="false"
+            [value]="userData.biography"
+            (input)="changeUserData(biography.value, 'biography', false)"
+            style="max-height: 160px"
+          ></textarea>
+          <small>
+            <span
+              class="text-{{
+                biography.value.length >= 40 && biography.value.length < 90
+                  ? 'warning'
+                  : biography.value.length >= 90
+                  ? 'danger'
+                  : 'success'
+              }}"
+            >
+              {{ biography.value.length }}
+            </span>
+            <span
+              class="text-{{
+                biography.value.length === 160 ? 'danger' : 'muted'
+              }}"
+            >
+              /160
+            </span>
+          </small>
+        </div>
+        <div class="mb-3 col-12">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<div *ngIf="user">
+  <div
+    class="bg-primary position-absolute top-0 start-0 vh-25 vw-100"
+    style="z-index: -1"
+  ></div>
+  <div class="vh-18"></div>
+  <div class="row m-0 container">
+    <div class="col-md-2 col-4 text-center">
+      <img
+        src="{{ user.avatar }}"
+        alt="Profile Picture"
+        class="bg-light rounded-circle shadow"
+        width="120px"
+        height="120px"
+        style="object-fit: cover; transform: translate(0, -50%)"
+      />
+    </div>
+    <div class="col-md-4 col-7">
+      <div class="mt-2">
+        <h2>
+          {{
+            user.companyAccount === "0"
+              ? user.firstName + " " + user.lastName
+              : user.companyName
+          }}
+        </h2>
+        <p class="text-muted" style="word-break: break-word">
+          {{ user.biography }}
+        </p>
+      </div>
+    </div>
+    <div class="col-md-4 col-12">
+      <div class="row mx-0 mb-0 mt-0 mt-md-2 justify-content-end w-100">
+        <div class="col-md-1 col-4" *ngIf="user.canSendMessage">
+          <button
+            type="button"
+            class="btn btn-primary rounded-4"
+            routerLink="/chat/{{ user.userId }}"
+          >
+            Message
+          </button>
+        </div>
+        <div class="col-md-1 col-4" *ngIf="user.canEditProfile">
+          <button
+            type="button"
+            class="btn btn-primary rounded-4"
+            routerLink="/profile/edit"
+          >
+            Editar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-feed *ngIf="user" [filter]="user.userId"></app-feed>
